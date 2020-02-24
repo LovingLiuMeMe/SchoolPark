@@ -1,6 +1,7 @@
 package cn.lovingliu.controller.admin;
 
 import cn.lovingliu.constant.RecordStatus;
+import cn.lovingliu.constant.UserRole;
 import cn.lovingliu.controller.BaseController;
 import cn.lovingliu.exception.SchoolParkException;
 import cn.lovingliu.page.PagedGridResult;
@@ -46,11 +47,19 @@ public class AdminController implements BaseController {
         if(bindingResult.hasErrors()){
             throw new SchoolParkException(bindingResult.getFieldError().getDefaultMessage());
         }
+        Integer userId = recordBO.getUserId();
+        User user = userService.getUserById(Long.valueOf(userId.toString()));
+        if(user.getRole() == UserRole.USER_IN){
+            recordBO.setAmt(0);
+        }
         Integer recordId = recordService.createRecord(recordBO);
 
         pictureService.createPictures(recordId,recordBO.getPicturesName());
-
-        return ServerResponse.createByErrorMessage("创建成功");
+        if(user.getRole() == UserRole.USER_IN){
+            return ServerResponse.createByErrorMessage("创建成功违停记录成功,违停人是校内人员,不进行扣款!");
+        }else {
+            return ServerResponse.createByErrorMessage("创建成功");
+        }
     }
 
     @ApiOperation(value = "获取违停信息列表",notes = "获取违停信息列表",httpMethod = "GET")

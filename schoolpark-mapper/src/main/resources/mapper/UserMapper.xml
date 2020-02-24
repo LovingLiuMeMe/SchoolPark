@@ -205,7 +205,14 @@
     select
     <include refid="Base_Column_List" />
     from school_park_user
-    where role = #{role}
+    <where>
+      <if test="role != null">
+        and role = #{role}
+      </if>
+      <if test="role == null">
+        and (role = 2 or role = 3)
+      </if>
+    </where>
   </select>
   <select id="selectByPhone" resultMap="BaseResultMap" parameterType="string">
     select

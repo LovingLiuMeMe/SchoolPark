@@ -77,7 +77,7 @@ public class SchoolParkAuthorize {
         }
         // 2.判断权限是否足够
         User userInCookie = JsonUtils.jsonToPojo(userStrInCookie,User.class);
-        if(userInCookie.getRole() != UserRole.USER){
+        if(userInCookie.getRole() != UserRole.USER_IN || userInCookie.getRole() != UserRole.USER_OUT){
             throw  new SchoolParkException(ExceptionCodeEnum.AUTHORIZE_ROLE_FAIL);
         }
     }

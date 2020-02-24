@@ -1,6 +1,7 @@
 package cn.lovingliu.controller.user;
 
 import cn.lovingliu.constant.RecordStatus;
+import cn.lovingliu.constant.UserRole;
 import cn.lovingliu.controller.BaseController;
 import cn.lovingliu.page.PagedGridResult;
 import cn.lovingliu.pojo.User;
@@ -62,10 +63,23 @@ public class UserController implements BaseController {
     @ApiOperation(value = "缴纳罚款",notes = "缴纳罚款",httpMethod = "POST")
     @GetMapping("/record/pay")
     public ServerResponse pay(@ApiParam(name = "recordId",value = "记录ID",required = true)
-                               @RequestParam(value = "recordId",required = true)Integer recordId){
-        int count = recordService.changeRecordStatus(recordId, RecordStatus.WAIT_PASS);
+                               @RequestParam(value = "recordId",required = true)Integer recordId,HttpServletRequest request){
+        String valueInCookie = CookieUtil.get(request,USER_COOKIE_KEY);
+        User userInCookie = JsonUtils.jsonToPojo(valueInCookie,User.class);
+        int count = 0;
+        if(userInCookie.getRole() == UserRole.USER_IN){
+            count = recordService.changeRecordStatus(recordId, RecordStatus.WAIT_PASS);
+        }else{
+            count = recordService.changeRecordStatus(recordId, RecordStatus.WAIT_COMMENT);
+        }
+
         if (count > 0){
-            return ServerResponse.createBySuccess("处理成功,等待管理员审核");
+            if(userInCookie.getRole() == UserRole.USER_IN){
+                return ServerResponse.createBySuccess("处理成功,因您是校内车主,不进行罚款,只对你进行口头警告!");
+            }else {
+                return ServerResponse.createBySuccess("处理成功,等待管理员审核");
+            }
+
         }
         return ServerResponse.createByErrorMessage("处理失败,详情请咨询管理员");
     }

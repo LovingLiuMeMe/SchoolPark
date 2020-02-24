@@ -2,9 +2,12 @@ package cn.lovingliu.controller.common;
 
 import cn.lovingliu.component.RandomValidateCode;
 import cn.lovingliu.constant.SessionNames;
+import cn.lovingliu.constant.UserRole;
 import cn.lovingliu.constant.UserStatus;
 import cn.lovingliu.controller.BaseController;
+import cn.lovingliu.exception.SchoolParkException;
 import cn.lovingliu.pojo.User;
+import cn.lovingliu.pojo.bo.UserBO;
 import cn.lovingliu.response.ServerResponse;
 import cn.lovingliu.service.RecordService;
 import cn.lovingliu.service.UserService;
@@ -13,14 +16,18 @@ import cn.lovingliu.util.JsonUtils;
 import cn.lovingliu.util.MD5Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.util.Date;
 
 @Api(value = "公共接口",tags = "公共接口")
 @RestController
@@ -93,7 +100,28 @@ public class CommonController implements BaseController {
             log.error("========= 获取验证码失败 =========", e);
         }
     }
-
+    @ApiOperation(value = "普通用户注册",notes = "普通用户注册",httpMethod = "POST")
+    @PostMapping(value = "/register")
+    public ServerResponse register(@ApiParam(name = "userBO",value = "管理员信息",required = true)
+                             @RequestBody @Valid UserBO userBO, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()){
+            throw new SchoolParkException(bindingResult.getFieldError().getDefaultMessage());
+        }
+        User userInDb = userService.getUserByPhone(userBO.getPhone());
+        if(userInDb != null){
+            return ServerResponse.createByErrorMessage("号码已被人注册,无法注册!");
+        }
+        userBO.setPassword(MD5Util.MD5EncodeUtf8(userBO.getPassword()));
+        userBO.setRole(UserRole.USER_IN);
+        userBO.setCreatedTime(new Date());
+        userBO.setUpdatedTime(new Date());
+        int count = userService.createUser(userBO);
+        if(count > 0){
+            return ServerResponse.createBySuccessMessage("创建成功");
+        }else {
+            return ServerResponse.createByErrorMessage("创建异常");
+        }
+    }
     private User setNullProperty(User userResult){
         userResult.setPassword(null);
         userResult.setAnswer(null);

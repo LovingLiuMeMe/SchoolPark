@@ -90,13 +90,13 @@ public class SuperAdminController implements BaseController {
 
     @ApiOperation(value = "创建管理员(已测)",notes = "创建管理员",httpMethod = "POST")
     @PostMapping("/admin/create")
-    public ServerResponse create(@ApiParam(name = "userBO",value = "管理员信息",required = true)
+    public ServerResponse createAdmin(@ApiParam(name = "userBO",value = "管理员信息",required = true)
                                  @RequestBody @Valid UserBO userBO, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw new SchoolParkException(bindingResult.getFieldError().getDefaultMessage());
         }
         User userInDb = userService.getUserByPhone(userBO.getPhone());
-        if(userInDb == null){
+        if(userInDb != null){
             return ServerResponse.createByErrorMessage("号码已被人使用,无法创建!");
         }
         userBO.setPassword(MD5Util.MD5EncodeUtf8(userBO.getPassword()));
@@ -124,7 +124,7 @@ public class SuperAdminController implements BaseController {
 
     @ApiOperation(value = "禁/启用管理员(已测)",notes = "禁/启用管理员",httpMethod = "POST")
     @PostMapping("/admin/able")
-    public ServerResponse create(@ApiParam(name = "adminId",value = "管理员ID",required = true)
+    public ServerResponse able(@ApiParam(name = "adminId",value = "管理员ID",required = true)
                                  @RequestParam(value = "adminId",required = true)
                                          Long adminId){
         User user = userService.getUserById(adminId);
@@ -160,7 +160,7 @@ public class SuperAdminController implements BaseController {
     @ApiOperation(value = "获得普通用户列表",notes = "获得普通用户列表",httpMethod = "POST")
     @PostMapping("/user/list")
     public ServerResponse userList(){
-        List<User> userList = userService.getUserListByRole(UserRole.USER);
+        List<User> userList = userService.getUserListByRole(null);
         userList.forEach(e -> {
             e.setPassword(null);
             e.setAnswer(null);
