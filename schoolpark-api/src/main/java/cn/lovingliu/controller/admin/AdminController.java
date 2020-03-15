@@ -48,17 +48,23 @@ public class AdminController implements BaseController {
             throw new SchoolParkException(bindingResult.getFieldError().getDefaultMessage());
         }
         Integer userId = recordBO.getUserId();
-        User user = userService.getUserById(Long.valueOf(userId.toString()));
+        User user = userService.getUserById(Long.valueOf(userId.toString())); // int => long
+        if(user.getInBlacklist() == 1){
+            return ServerResponse.createByErrorMessage("该用户已经再黑名单中,共有"+user.getInfractionsCount()+"次违停记录,请立即使用拖车拖走！");
+        }
         if(user.getRole() == UserRole.USER_IN){
             recordBO.setAmt(0);
         }
         Integer recordId = recordService.createRecord(recordBO);
 
         pictureService.createPictures(recordId,recordBO.getPicturesName());
+
+        userService.noticeUser(Long.valueOf(userId.toString())); // int => long
+
         if(user.getRole() == UserRole.USER_IN){
-            return ServerResponse.createByErrorMessage("创建成功违停记录成功,违停人是校内人员,不进行扣款!");
+            return ServerResponse.createBySuccessMessage("创建成功违停记录成功,违停人是校内人员,不进行扣款!");
         }else {
-            return ServerResponse.createByErrorMessage("创建成功");
+            return ServerResponse.createBySuccessMessage("创建成功");
         }
     }
 

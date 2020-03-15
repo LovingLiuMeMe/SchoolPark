@@ -31,7 +31,12 @@ public class UserBO implements Serializable {
 
     private Integer ststus;
 
+    private Integer infractionsCount;
+
+    private Integer inBlacklist;
+
     private Date createdTime;
 
     private Date updatedTime;
+
 }

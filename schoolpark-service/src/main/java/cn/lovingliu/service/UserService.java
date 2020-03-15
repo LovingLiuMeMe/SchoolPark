@@ -12,4 +12,5 @@ public interface UserService {
     List<User> getUserListByRole(Integer role);
     Integer deleteUser(Long userId);
     Integer updateUser(User user);
+    void noticeUser(Long userId);
 }

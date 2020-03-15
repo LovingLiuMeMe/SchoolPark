@@ -7,10 +7,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="schoolpark-api" />
-        <module name="schoolpark-pojo" />
+        <module name="schoolpark-mapper" />
         <module name="schoolpark-service" />
         <module name="schoolpark-common" />
-        <module name="schoolpark-mapper" />
+        <module name="schoolpark-pojo" />
       </profile>
     </annotationProcessing>
   </component>

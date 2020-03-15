@@ -3,8 +3,10 @@ package cn.lovingliu.service.impl;
 import cn.lovingliu.constant.RecordStatus;
 import cn.lovingliu.mapper.RecordMapper;
 import cn.lovingliu.mapper.RecordMapperCustom;
+import cn.lovingliu.mapper.UserMapper;
 import cn.lovingliu.page.PagedGridResult;
 import cn.lovingliu.pojo.Record;
+import cn.lovingliu.pojo.User;
 import cn.lovingliu.pojo.bo.RecordBO;
 import cn.lovingliu.pojo.vo.RecordVO;
 import cn.lovingliu.service.BaseService;
@@ -14,6 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +27,8 @@ public class RecordServiceImpl extends BaseService implements RecordService {
     private RecordMapperCustom recordMapperCustom;
     @Autowired
     private RecordMapper recordMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     public RecordVO getRecordVOByRecordId(Integer recordId){
         RecordVO recordVO = recordMapperCustom.selectByPrimaryKey(recordId);
@@ -70,12 +75,26 @@ public class RecordServiceImpl extends BaseService implements RecordService {
         paramsMap.put("recordId",recordId);
         paramsMap.put("willChangeRecordStatus",willChangeRecordStatus);
         int count = recordMapperCustom.updateRecordStatusByPrimaryKey(paramsMap);
+        if(count > 0){
+            // 减少次数
+            Record record = recordMapper.selectByPrimaryKey(recordId);
+            User user = userMapper.selectByPrimaryKey(Long.valueOf(record.getUserId().toString()));
+            Integer infractionsCount = user.getInfractionsCount();
+            Integer inBlacklist = user.getInBlacklist();
+            if(infractionsCount == 3 && inBlacklist == 1){
+                user.setInBlacklist(0);
+            }
+            user.setInfractionsCount(infractionsCount - 1);
+            userMapper.updateByPrimaryKeySelective(user);
+        }
         return count;
     }
 
     public Integer createRecord(RecordBO recordBO){
         Record record = new Record();
         BeanUtils.copyProperties(recordBO,record);
+        record.setCreatedTime(new Date());
+        record.setUpdatedTime(new Date());
         Integer recordId = recordMapper.insertSelective(record);
         return recordId;
     }
