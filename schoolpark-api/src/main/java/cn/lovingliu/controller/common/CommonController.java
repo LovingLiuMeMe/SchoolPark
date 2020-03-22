@@ -1,7 +1,6 @@
 package cn.lovingliu.controller.common;
 
 import cn.lovingliu.component.RandomValidateCode;
-import cn.lovingliu.constant.SessionNames;
 import cn.lovingliu.constant.UserRole;
 import cn.lovingliu.constant.UserStatus;
 import cn.lovingliu.controller.BaseController;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Date;
 
@@ -51,11 +49,11 @@ public class CommonController implements BaseController {
         if(StringUtils.isBlank(verifyCode)){
             return ServerResponse.createByErrorMessage("验证码不能为空");
         }
-        HttpSession session = request.getSession();
-        String verifyCodeInSession = (String) session.getAttribute(SessionNames.VERIFY_CODE_KEY);
-        if (verifyCodeInSession == null || !verifyCode.equalsIgnoreCase(verifyCodeInSession)){
-            return ServerResponse.createByErrorMessage("验证码错误");
-        }
+//        HttpSession session = request.getSession();
+////        String verifyCodeInSession = (String) session.getAttribute(SessionNames.VERIFY_CODE_KEY);
+////        if (verifyCodeInSession == null || !verifyCode.equalsIgnoreCase(verifyCodeInSession)){
+////            return ServerResponse.createByErrorMessage("验证码错误");
+////        }
         if(StringUtils.isBlank(phone)){
             return ServerResponse.createByErrorMessage("用户名为空");
         }
@@ -79,7 +77,7 @@ public class CommonController implements BaseController {
 
     @ApiOperation(value = "用户退出登录",notes = "用户退出登录",httpMethod = "POST")
     @PostMapping("logout")
-    public ServerResponse logout(@RequestBody User user, HttpServletResponse response) {
+    public ServerResponse logout(HttpServletResponse response) {
         CookieUtil.set(response,USER_COOKIE_KEY,null,0);
         return ServerResponse.createBySuccessMessage("退出登录");
     }
