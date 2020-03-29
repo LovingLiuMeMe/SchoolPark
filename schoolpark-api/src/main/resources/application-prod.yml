@@ -8,7 +8,7 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource # 数据源类型
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://49.235.110.134:3306/school-park?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+    url: jdbc:mysql://119.29.236.67:3306/school-park?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
     username: root
     password: 123456
     hikari:
