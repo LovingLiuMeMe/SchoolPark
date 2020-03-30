@@ -1,7 +1,6 @@
 package cn.lovingliu.controller.common;
 
 import cn.lovingliu.component.RandomValidateCode;
-import cn.lovingliu.constant.UserRole;
 import cn.lovingliu.constant.UserStatus;
 import cn.lovingliu.controller.BaseController;
 import cn.lovingliu.exception.SchoolParkException;
@@ -50,10 +49,10 @@ public class CommonController implements BaseController {
             return ServerResponse.createByErrorMessage("验证码不能为空");
         }
 //        HttpSession session = request.getSession();
-////        String verifyCodeInSession = (String) session.getAttribute(SessionNames.VERIFY_CODE_KEY);
-////        if (verifyCodeInSession == null || !verifyCode.equalsIgnoreCase(verifyCodeInSession)){
-////            return ServerResponse.createByErrorMessage("验证码错误");
-////        }
+//        String verifyCodeInSession = (String) session.getAttribute(SessionNames.VERIFY_CODE_KEY);
+//        if (verifyCodeInSession == null || !verifyCode.equalsIgnoreCase(verifyCodeInSession)){
+//            return ServerResponse.createByErrorMessage("验证码错误");
+//        }
         if(StringUtils.isBlank(phone)){
             return ServerResponse.createByErrorMessage("用户名为空");
         }
@@ -110,7 +109,6 @@ public class CommonController implements BaseController {
             return ServerResponse.createByErrorMessage("号码已被人注册,无法注册!");
         }
         userBO.setPassword(MD5Util.MD5EncodeUtf8(userBO.getPassword()));
-        userBO.setRole(UserRole.USER_IN);
         userBO.setCreatedTime(new Date());
         userBO.setUpdatedTime(new Date());
         int count = userService.createUser(userBO);
