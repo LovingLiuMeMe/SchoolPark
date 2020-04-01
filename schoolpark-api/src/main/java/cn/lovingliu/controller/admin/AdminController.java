@@ -42,7 +42,6 @@ public class AdminController implements BaseController {
     @ApiOperation(value = "创建违停信息",notes = "创建违停信息",httpMethod = "POST")
     @PostMapping("/record/create")
     public ServerResponse create(@ApiParam(name = "recordBO",value = "违停详细信息",required = true)
-                                 @RequestParam(value = "recordBO",required = true)
                                  @RequestBody @Valid RecordBO recordBO,BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw new SchoolParkException(bindingResult.getFieldError().getDefaultMessage());
