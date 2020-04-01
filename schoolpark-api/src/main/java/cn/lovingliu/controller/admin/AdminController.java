@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 @Api(value = "管理员用户",tags = "管理员用户接口")
 @RestController
@@ -126,5 +127,16 @@ public class AdminController implements BaseController {
         }else {
             return ServerResponse.createByErrorMessage("更新失败");
         }
+    }
+
+    @ApiOperation(value = "获得普通用户列表",notes = "获得普通用户列表",httpMethod = "POST")
+    @PostMapping("/user/list")
+    public ServerResponse userList(){
+        List<User> userList = userService.getUserListByRole(null);
+        userList.forEach(e -> {
+            e.setPassword(null);
+            e.setAnswer(null);
+        });
+        return ServerResponse.createBySuccess(userList);
     }
 }
