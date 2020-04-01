@@ -95,7 +95,7 @@ public class AdminController implements BaseController {
                                HttpServletRequest request){
         String valueInCookie = CookieUtil.get(request,USER_COOKIE_KEY);
         User userInCookie = JsonUtils.jsonToPojo(valueInCookie,User.class);
-        PagedGridResult pagedGridResult = recordService.getRecordVOListByUserId(userInCookie.getId(),recordStatus,page,pageSize);
+        PagedGridResult pagedGridResult = recordService.getRecordVOListByCreaterId(userInCookie.getId(),recordStatus,page,pageSize);
         return ServerResponse.createBySuccess(pagedGridResult);
     }
 
