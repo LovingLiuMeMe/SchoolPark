@@ -140,7 +140,7 @@
     ) values
     <foreach collection="list" item="item" index="index" separator=",">
       (
-      #{item.recordId}
+      #{item.recordId},
       #{item.pictureName},
       #{item.pictureOrder},
       #{item.createdTime}
