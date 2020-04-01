@@ -71,7 +71,7 @@ public class AdminController implements BaseController {
         if(count <= 0){
             return ServerResponse.createByErrorMessage("保存失败");
         }
-        log.info("recordId",record.getId());
+       System.out.println("recordId:"+record.getId());
         pictureService.createPictures(record.getId(),recordBO.getPicturesName());
 
         userService.noticeUser(Long.valueOf(userId.toString())); // int => long
