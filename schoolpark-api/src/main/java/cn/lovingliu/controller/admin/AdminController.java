@@ -43,7 +43,7 @@ public class AdminController implements BaseController {
     @PostMapping("/record/create")
     public ServerResponse create(@ApiParam(name = "recordBO",value = "违停详细信息",required = true)
                                  @RequestParam(value = "recordBO",required = true)
-                                 @Valid RecordBO recordBO,BindingResult bindingResult){
+                                 @RequestBody @Valid RecordBO recordBO,BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw new SchoolParkException(bindingResult.getFieldError().getDefaultMessage());
         }
