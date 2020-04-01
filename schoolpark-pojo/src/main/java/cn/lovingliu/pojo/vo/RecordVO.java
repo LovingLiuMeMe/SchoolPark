@@ -15,9 +15,9 @@ import java.util.List;
 public class RecordVO {
     private Integer id;
 
-    private Integer userName;
+    private String userName;
 
-    private Integer createrName;
+    private String createrName;
 
     private String recordDescribe;
 
