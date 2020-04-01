@@ -57,7 +57,7 @@ public class AdminController implements BaseController {
         }
         Integer recordId = recordService.createRecord(recordBO);
 
-        log.info("recordId=======================",recordId);
+        log.error("recordId======================={}",recordId);
         pictureService.createPictures(recordId,recordBO.getPicturesName());
 
         userService.noticeUser(Long.valueOf(userId.toString())); // int => long
