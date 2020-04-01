@@ -7,16 +7,13 @@ import cn.lovingliu.mapper.UserMapper;
 import cn.lovingliu.page.PagedGridResult;
 import cn.lovingliu.pojo.Record;
 import cn.lovingliu.pojo.User;
-import cn.lovingliu.pojo.bo.RecordBO;
 import cn.lovingliu.pojo.vo.RecordVO;
 import cn.lovingliu.service.BaseService;
 import cn.lovingliu.service.RecordService;
 import com.github.pagehelper.PageHelper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,13 +87,9 @@ public class RecordServiceImpl extends BaseService implements RecordService {
         return count;
     }
 
-    public Integer createRecord(RecordBO recordBO){
-        Record record = new Record();
-        BeanUtils.copyProperties(recordBO,record);
-        record.setCreatedTime(new Date());
-        record.setUpdatedTime(new Date());
-        Integer recordId = recordMapper.insertSelective(record);
-        return recordId;
+    public Integer createRecord(Record record){
+        Integer count = recordMapper.insertSelective(record);
+        return count;
     }
 
     public Integer commentRecord(Integer recordId,Integer remarkType,String remark){

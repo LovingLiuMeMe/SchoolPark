@@ -5,6 +5,7 @@ import cn.lovingliu.constant.UserRole;
 import cn.lovingliu.controller.BaseController;
 import cn.lovingliu.exception.SchoolParkException;
 import cn.lovingliu.page.PagedGridResult;
+import cn.lovingliu.pojo.Record;
 import cn.lovingliu.pojo.User;
 import cn.lovingliu.pojo.bo.RecordBO;
 import cn.lovingliu.response.ServerResponse;
@@ -18,12 +19,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 @Api(value = "管理员用户",tags = "管理员用户接口")
@@ -55,10 +58,21 @@ public class AdminController implements BaseController {
         if(user.getRole() == UserRole.USER_IN){
             recordBO.setAmt(0);
         }
-        Integer recordId = recordService.createRecord(recordBO);
 
-        log.error("recordId======================={}",recordId);
-        pictureService.createPictures(recordId,recordBO.getPicturesName());
+        /**
+         * 复制BO
+         */
+        Record record = new Record();
+        BeanUtils.copyProperties(recordBO,record);
+        record.setCreatedTime(new Date());
+        record.setUpdatedTime(new Date());
+
+        Integer count = recordService.createRecord(record);
+        if(count <= 0){
+            return ServerResponse.createByErrorMessage("保存失败");
+        }
+        log.info("recordId",record.getId());
+        pictureService.createPictures(record.getId(),recordBO.getPicturesName());
 
         userService.noticeUser(Long.valueOf(userId.toString())); // int => long
 
