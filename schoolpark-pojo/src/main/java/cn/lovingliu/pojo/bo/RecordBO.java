@@ -3,7 +3,7 @@ package cn.lovingliu.pojo.bo;
 import lombok.Data;
 import lombok.ToString;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public class RecordBO {
     private Integer id;
 
-    @NotEmpty(message = "违停者信息不能空")
+    @NotNull(message = "违停者信息不能空")
     private Integer userId;
 
     private Integer createrId;
