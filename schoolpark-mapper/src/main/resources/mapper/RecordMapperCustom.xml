@@ -116,7 +116,7 @@
     <update id="updateRecordStatusByPrimaryKey">
         update
             school_park_record
-        set school_park_record = #{paramsMap.willChangeRecordStatus}
+        set record_status = #{paramsMap.willChangeRecordStatus}
         where id = #{paramsMap.recordId}
     </update>
 </mapper>

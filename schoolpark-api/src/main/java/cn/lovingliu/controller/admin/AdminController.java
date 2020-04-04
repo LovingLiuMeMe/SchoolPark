@@ -101,7 +101,7 @@ public class AdminController implements BaseController {
 
     @ApiOperation(value = "审核违停信息",notes = "审核违停信息",httpMethod = "POST")
     @GetMapping("/record/pass")
-    public ServerResponse list(@ApiParam(name = "recordId",value = "记录ID",required = true)
+    public ServerResponse recordPass(@ApiParam(name = "recordId",value = "记录ID",required = true)
                                @RequestParam(value = "recordId",required = true)Integer recordId){
         int count = recordService.changeRecordStatus(recordId, RecordStatus.WAIT_COMMENT);
         if (count > 0){
