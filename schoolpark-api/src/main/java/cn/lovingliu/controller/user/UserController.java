@@ -92,8 +92,8 @@ public class UserController implements BaseController {
                                   @ApiParam(name = "remarkType",value = "评论等级",required = true)
                                   @RequestParam(value = "remarkType",required = true)
                                   Integer remarkType,
-                                  @ApiParam(name = "remarkType",value = "评论详情",required = true)
-                                  @RequestParam(value = "remarkType",required = true)
+                                  @ApiParam(name = "remark",value = "评论详情",required = true)
+                                  @RequestParam(value = "remark",required = true)
                                   String remark
                                ){
         int count = recordService.commentRecord(recordId,remarkType,remark);

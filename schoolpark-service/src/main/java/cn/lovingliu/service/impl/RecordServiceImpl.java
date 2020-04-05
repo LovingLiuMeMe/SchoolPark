@@ -14,6 +14,7 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,6 +98,7 @@ public class RecordServiceImpl extends BaseService implements RecordService {
         record.setRecordStatus(RecordStatus.FINISH_COMMENT);
         record.setRemarkType(remarkType);
         record.setRemark(remark);
+        record.setUpdatedTime(new Date());
         return recordMapper.updateByPrimaryKeySelective(record);
     }
 }
