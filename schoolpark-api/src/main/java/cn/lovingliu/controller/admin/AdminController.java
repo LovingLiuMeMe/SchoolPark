@@ -71,9 +71,12 @@ public class AdminController implements BaseController {
         if(count <= 0){
             return ServerResponse.createByErrorMessage("保存失败");
         }
-       System.out.println("recordId:"+record.getId());
+        System.out.println("recordId:"+record.getId());
         pictureService.createPictures(record.getId(),recordBO.getPicturesName());
 
+        /**
+         * 根据违停次数判断是否加入黑名单同时会被通知
+         */
         userService.noticeUser(Long.valueOf(userId.toString())); // int => long
 
         if(user.getRole() == UserRole.USER_IN){
@@ -135,6 +138,7 @@ public class AdminController implements BaseController {
                 log.error("图片删除失败");
             }
         }
+        user.setUpdatedTime(new Date());
         user.setId(userInCookie.getId());
         int count = userService.updateUser(user);
         if(count > 0){

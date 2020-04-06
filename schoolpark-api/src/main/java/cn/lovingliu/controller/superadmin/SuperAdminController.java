@@ -134,7 +134,12 @@ public class SuperAdminController implements BaseController {
         user.setStstus(user.getStstus() == UserStatus.ENABLE ? UserStatus.DISABLE : UserStatus.ENABLE);
         int count = userService.updateUser(user);
         if(count > 0){
-            return ServerResponse.createBySuccessMessage("更新成功");
+            if(user.getStstus() == UserStatus.DISABLE){
+                return ServerResponse.createBySuccessMessage("禁用成功");
+            }else {
+                return ServerResponse.createBySuccessMessage("启用成功");
+            }
+
         }
         return ServerResponse.createByErrorMessage("更新失败");
     }
@@ -192,6 +197,7 @@ public class SuperAdminController implements BaseController {
                 log.error("图片删除失败");
             }
         }
+        user.setUpdatedTime(new Date());
         user.setId(userInCookie.getId());
         if(StringUtils.isNotBlank(user.getPassword())){
             user.setPassword(MD5Util.MD5EncodeUtf8(user.getPassword()));

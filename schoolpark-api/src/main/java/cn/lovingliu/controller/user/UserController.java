@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 @Api(value = "普通用户",tags = "普通用户接口")
 @RestController
@@ -128,6 +129,7 @@ public class UserController implements BaseController {
                 log.error("图片删除失败");
             }
         }
+        user.setUpdatedTime(new Date());
         user.setId(userInCookie.getId());
         int count = userService.updateUser(user);
         if(count > 0){
