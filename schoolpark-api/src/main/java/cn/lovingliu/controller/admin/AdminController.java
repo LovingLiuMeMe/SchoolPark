@@ -126,7 +126,7 @@ public class AdminController implements BaseController {
     @ApiOperation(value = "修改管理员信息(已测)",notes = "修改管理员信息",httpMethod = "POST")
     @PostMapping("/info/update")
     public ServerResponse update(@ApiParam(name = "user",value = "要修改的管理员信息",required = true)
-                                 @RequestParam(value = "user",required = true) User user,
+                                 @RequestBody User user,
                                  HttpServletRequest request){
 
         String valueInCookie = CookieUtil.get(request,USER_COOKIE_KEY);
