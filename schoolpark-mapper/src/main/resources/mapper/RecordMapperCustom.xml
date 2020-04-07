@@ -33,7 +33,7 @@
         <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
         <collection
                 property="pictureVOList"
-                column="recordId"
+                column="id"
                 select="selectPictureByRecordId"
                 ofType="cn.lovingliu.pojo.vo.PictureVO">
             <id column="picture_id" property="pictureId" jdbcType="INTEGER" />
@@ -41,15 +41,6 @@
             <result column="picture_order" property="pictureOrder" jdbcType="INTEGER" />
         </collection>
     </resultMap>
-    
-    <select id="selectPictureByRecordId" parameterType="java.lang.Integer" resultType="cn.lovingliu.pojo.vo.PictureVO">
-        select
-            id as picture_id,
-            picture_name,
-            picture_order
-        from school_park_pictures
-        where record_id = #{recordId}
-    </select>
 
 
 
@@ -89,13 +80,8 @@
             r.remark_type,
             r.remark,
             r.created_time,
-            r.updated_time,
-            p.id as picture_id,
-            p.picture_name as picture_name,
-            p.picture_order as picture_order
+            r.updated_time
         from school_park_record r
-        left join school_park_pictures p
-        on r.id = p.record_id
         left join school_park_user ru
         on r.user_id = ru.id
         left join school_park_user pcu
@@ -111,6 +97,15 @@
                 and r.record_status = #{paramsMap.recordStatus}
             </if>
         </where>
+    </select>
+
+    <select id="selectPictureByRecordId" parameterType="java.lang.Integer" resultType="cn.lovingliu.pojo.vo.PictureVO">
+            select
+                spp.id as picture_id,
+                spp.picture_name,
+                spp.picture_order
+            from school_park_pictures spp
+        where spp.record_id = #{id}
     </select>
 
     <update id="updateRecordStatusByPrimaryKey">
