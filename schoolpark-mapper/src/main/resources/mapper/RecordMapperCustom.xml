@@ -36,9 +36,9 @@
                 column="id"
                 select="selectPictureByRecordId"
                 ofType="cn.lovingliu.pojo.vo.PictureVO">
-            <id column="picture_id" property="pictureId" jdbcType="INTEGER" />
-            <result column="picture_name" property="pictureName" jdbcType="VARCHAR" />
-            <result column="picture_order" property="pictureOrder" jdbcType="INTEGER" />
+            <id column="pictureId" property="pictureId" jdbcType="INTEGER" />
+            <result column="pictureName" property="pictureName" jdbcType="VARCHAR" />
+            <result column="pictureOrder" property="pictureOrder" jdbcType="INTEGER" />
         </collection>
     </resultMap>
 
@@ -99,12 +99,12 @@
         </where>
     </select>
 
-    <select id="selectPictureByRecordId" parameterType="java.lang.Integer" resultType="cn.lovingliu.pojo.vo.PictureVO">
-            select
-                spp.id as picture_id,
-                spp.picture_name,
-                spp.picture_order
-            from school_park_pictures spp
+    <select id="selectPictureByRecordId" parameterType="integer" resultType="cn.lovingliu.pojo.vo.PictureVO">
+        select
+            spp.id as pictureId,
+            spp.picture_name as pictureName,
+            spp.picture_order as pictureOrder
+        from school_park_pictures spp
         where spp.record_id = #{id}
     </select>
 
